@@ -6,7 +6,15 @@ FileWebpackPlugin.prototype.apply = function(compiler) {
   var self = this;
   compiler.plugin('emit', function(compiler, callback) {
     Object.keys(self.options).forEach(function(filename) {
-      console.log(filename);
+      var helloWorld = 'Hello World!';
+      compiler.assets[filename] = {
+        source: function() {
+          return helloWorld;
+        },
+        size: function() {
+          return helloWorld.length;
+        }
+      };
     });
 
     callback();
