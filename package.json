@@ -1,0 +1,19 @@
+{
+  "name": "file-webpack-plugin",
+  "version": "1.0.0",
+  "description": "WIP",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:markdalgleish/file-webpack-plugin.git"
+  },
+  "author": "Mark Dalgleish",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/markdalgleish/file-webpack-plugin/issues"
+  },
+  "homepage": "https://github.com/markdalgleish/file-webpack-plugin"
+}
