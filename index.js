@@ -22,10 +22,8 @@ FileWebpackPlugin.prototype.apply = function(compiler) {
     Promise.props(assetPromises)
       .then(function(assets) {
         assign(compiler.assets, assets);
-        done();
-      }, function(err) {
-        done(err);
-      });
+      })
+      .nodeify(done);
   });
 };
 
