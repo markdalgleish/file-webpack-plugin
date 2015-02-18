@@ -1,6 +1,7 @@
 var Promise = require('bluebird');
 var mapValues = require('lodash.mapvalues');
 var assign = require('lodash.assign');
+var curry = require('lodash.curry');
 
 function FileWebpackPlugin(files) {
   this.files = files || {};
@@ -20,12 +21,14 @@ FileWebpackPlugin.prototype.apply = function(compiler) {
     });
 
     Promise.props(assetPromises)
-      .then(function(assets) {
-        assign(compiler.assets, assets);
-      })
+      .then(addAssetsToCompiler(compiler))
       .nodeify(done);
   });
 };
+
+var addAssetsToCompiler = curry(function(compiler, assets) {
+  assign(compiler.assets, assets);
+});
 
 function createAssetFromContents(contents) {
   return {
