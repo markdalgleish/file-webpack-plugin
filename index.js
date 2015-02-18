@@ -1,8 +1,9 @@
 var Promise = require('bluebird');
-var map = require('lodash.map');
+var mapObj = require('map-obj');
+var assign = require('object-assign');
 
-function FileWebpackPlugin(options) {
-  this.options = options || {};
+function FileWebpackPlugin(files) {
+  this.files = files || {};
 }
 
 FileWebpackPlugin.prototype.apply = function(compiler) {
@@ -10,20 +11,17 @@ FileWebpackPlugin.prototype.apply = function(compiler) {
   compiler.plugin('emit', function(compiler, done) {
     var data = {};
 
-    var promises = map(self.options, function(asyncTemplate, filename) {
-      return new Promise(function(reject, resolve) {
-        asyncTemplate(data, function(err, contents) {
-          if (err) return reject(err);
+    var assetPromises = mapObj(self.files, function(filename, asyncTemplate) {
+      var promise = Promise
+        .fromNode(asyncTemplate.bind(null, data))
+        .then(createAssetFromContents)
 
-          compiler.assets[filename] = createAsset(contents);
-
-          resolve();
-        });
-      });
+      return [filename, promise];
     });
 
-    Promise.all(promises)
-      .then(function() {
+    Promise.props(assetPromises)
+      .then(function(assets) {
+        assign(compiler.assets, assets);
         done();
       }, function(err) {
         done(err);
@@ -31,7 +29,7 @@ FileWebpackPlugin.prototype.apply = function(compiler) {
   });
 };
 
-function createAsset(contents) {
+function createAssetFromContents(contents) {
   return {
     source: function() {
       return contents;
