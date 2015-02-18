@@ -13,11 +13,9 @@ FileWebpackPlugin.prototype.apply = function(compiler) {
     var data = {};
 
     var assetPromises = mapValues(self.files, function(asyncTemplate, filename) {
-      var promise = Promise
+      return Promise
         .fromNode(asyncTemplate.bind(null, data))
-        .then(createAssetFromContents)
-
-      return promise;
+        .then(createAssetFromContents);
     });
 
     Promise.props(assetPromises)
