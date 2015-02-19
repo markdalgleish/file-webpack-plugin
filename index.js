@@ -24,11 +24,7 @@ FileWebpackPlugin.prototype.apply = function(compiler) {
   });
 };
 
-var addAssetsToCompiler = curry(function(compiler, assets) {
-  assign(compiler.assets, assets);
-});
-
-function createAssetFromContents(contents) {
+var createAssetFromContents = function(contents) {
   return {
     source: function() {
       return contents;
@@ -37,6 +33,10 @@ function createAssetFromContents(contents) {
       return contents.length;
     }
   };
-}
+};
+
+var addAssetsToCompiler = curry(function(compiler, assets) {
+  assign(compiler.assets, assets);
+});
 
 module.exports = FileWebpackPlugin;
