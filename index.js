@@ -10,11 +10,9 @@ function FileWebpackPlugin(files) {
 FileWebpackPlugin.prototype.apply = function(compiler) {
   var self = this;
   compiler.plugin('emit', function(compiler, done) {
-    var data = {};
-
     var assetPromises = mapValues(self.files, function(asyncTemplate, filename) {
       return Promise
-        .fromNode(asyncTemplate.bind(null, data))
+        .fromNode(asyncTemplate)
         .then(createAssetFromContents);
     });
 
